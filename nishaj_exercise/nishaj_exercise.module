@@ -1,0 +1,37 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+//nisha_exercise_form_alter():  used to alter form.
+//$form: The form array being altered.
+//$form_state: An object representing the current state of the form.
+//$form_id: The unique ID of the form.
+
+function nishaj_exercise_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+     // $route = \Drupal::routeMatch()->getRouteName();
+     // print_r($route);
+      //exit;
+    $data=\Drupal::service('custom_service')->getName();  // returns the name of a configuration form
+     // print_r($data);
+      //exit;
+
+
+}
+
+/**
+ * Implements hook_theme().
+ */
+function nishaj_exercise_theme($existing, $type, $theme, $path) {   //nishaj_exercise_theme used to define new hook theme.
+
+    return [
+            'block_plugin_template' => [   //name of the template file.
+                'variables' => [           //defined variables
+                    'text' => "",
+                    'hexcode' =>"",
+                ],
+            ],
+        ];
+
+    }

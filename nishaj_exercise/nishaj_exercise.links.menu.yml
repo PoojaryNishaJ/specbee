@@ -1,0 +1,6 @@
+example.admin:                            # The machine name of the menu link.
+  title: 'controller menu'                # Text displayed in the menu link.
+  description: 'controller menu created for the site'       # description for the menu link.
+  route_name: 'exercise.page'             # The route name that the menu link links to.
+  menu_name: admin                        # The machine name of the menu where the menu link should appear.
+#This file is used to create menu links.

@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * implements hook_schema().
+ */
+function nishaj_exercise_schema() {   # This function creates table user_details in the database.
+    $schema['user_details'] = [       # The argument along with table name and inside the array mention all the details about the table.
+        'description' => 'Contains user details',  # The field and the field description.
+        'fields' => [
+            'id' => [
+                'description' => 'holds id',
+                'type' => 'serial',
+                'not null' => true
+            ],
+            'firstname' => [
+                'description' => 'Firstname of the user',  # The field and the field description.
+                'type' => 'varchar',
+                'length' => 60,
+                'not null' => true,
+            ],
+            'email' => [
+                'description' => 'Email of the user',  # The field and the field description.
+                'type' => 'varchar',
+                'length' => 60,
+                'not null' => true,
+            ],
+            'gender' => [
+                'description' => 'gender of the user',   # The field and the field description.
+                'type' => 'varchar',
+                'length' => 60,
+                'not null' => true,
+            ],
+        ],
+        'primary key' => ['id'],  # the primary key field.
+    ];
+    return $schema;
+}
+
+

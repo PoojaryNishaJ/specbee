@@ -1,0 +1,6 @@
+add_content.article:          # machine name of the action button
+  route_name: "config.custom" # name of the route that the action button links to
+  title: "Config form"        # title displayed
+  appears_on:
+    - "exercise.custom_form"  # Where should it has to appear.
+# This file is used to create an action button

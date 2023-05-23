@@ -1,0 +1,16 @@
+exercise.custom_form:                 # The machine name
+  route_name: exercise.custom_form    # The name of the route that menu tab is linked to.
+  title: 'custom page'                # Title for the menu tab.
+  base_route: exercise.custom_form    # The name of the base route with which the menu tab is associated with.
+
+config.custom:                        # The machine name
+  route_name: config.custom           # The name of the route that menu tab is linked to.
+  title: 'config'                     # Title for the menu tab.
+  base_route: exercise.custom_form    # The name of the base route with which the menu tab is associated with.
+
+exercise.page:                        # The machine name
+  route_name: exercise.page           # The name of the route that menu tab is linked to.
+  title: 'controller'                 # Title for the menu tab.
+  base_route: exercise.custom_form    # The name of the base route with which the menu tab is associated with.
+
+

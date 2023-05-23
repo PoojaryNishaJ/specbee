@@ -1,0 +1,5 @@
+css_lib:        # The name of the library defined
+  version: 1.x  # The version number of the library
+  css:          # CSS files to include in the library.
+    theme:      # The location where the CSS files should be placed.
+      CSS/style.css: {}   # path to the CSS file

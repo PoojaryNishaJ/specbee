@@ -1,0 +1,25 @@
+exercise.page:       #route name
+  path: '/exercise'  # path of the particular route.
+  defaults:          # default attributes.
+    _controller: '\Drupal\nishaj_exercise\Controller\CustomController::hello' # Class name and method to be called  to handle the request.
+    _title: 'Exercise'
+  requirements:      # can add your custom permissions.
+    _permission: 'access content'   #permission that a user must have to access this route.
+
+exercise.custom_form:                                              # route name
+  path: "/get-user/details"                                        # path of the particular route.
+  defaults:                                                        # The path that is called.
+    _form: '\Drupal\nishaj_exercise\Form\CustomForm'
+    _title: "Custom Form to get user details"                      # title for the page.
+  requirements:                                                    # permissions
+    _permission: 'access content'
+
+config.custom:                                                      # route name
+  path: '/admin/config/example-form'                                # path of the particular route.
+  defaults:                                                         # The path that is called.
+    _form: '\Drupal\nishaj_exercise\Form\CustomConfigForm'
+    _title: 'Custom Configuration Form'                             # title for the page.
+  requirements:
+    _permission: 'permission for config form'                       # users should have this permission to access the content.
+  options:
+    _admin_route: TRUE                                              # The route is part of the administration page

@@ -1,0 +1,4 @@
+permission for config form:                       #machine name of the permission
+  title: handles permission for config form       #title of the permission
+  description: handles permission for config for  #description for the particular permission.
+#This file defines a permission.
