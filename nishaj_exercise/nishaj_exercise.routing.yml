@@ -23,3 +23,11 @@ config.custom:                                                      # route name
     _permission: 'permission for config form'                       # users should have this permission to access the content.
   options:
     _admin_route: TRUE                                              # The route is part of the administration page
+
+dependent.form:                                                      #  route name
+  path: '/dropdown'                                                  # path of the particular route.
+  defaults:
+    _form: '\Drupal\nishaj_exercise\Form\DependentDropdownForm'             # The path that is called.
+    _title: 'Dependent Dropdown'                                      # title for the page.
+  requirements:
+    _permission: 'access content'                                      # users should have this permission to access the content.

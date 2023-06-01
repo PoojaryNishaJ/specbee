@@ -2,6 +2,12 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
+/**
+ * @file
+ * Contains nishaj_exercise.module.
+ */
+
+ use Drupal\nishaj_exercise\Event\UserLoginEvent; #included the event that is cteated that is user login event to use the constant variable here.
 
 //nisha_exercise_form_alter():  used to alter form.
 //$form: The form array being altered.
@@ -20,6 +26,7 @@ function nishaj_exercise_form_alter(&$form, FormStateInterface $form_state, $for
 
 }
 
+
 /**
  * Implements hook_theme().
  */
@@ -33,5 +40,15 @@ function nishaj_exercise_theme($existing, $type, $theme, $path) {   //nishaj_exe
                 ],
             ],
         ];
-
     }
+/**
+ * Implements hook_user_login().
+ */
+function nishaj_exercise_user_login($account) {
+    // Instantiate our event.
+    $event = new UserLoginEvent($account); # Initializing the object for the event.
+
+    // Get the event_dispatcher service and dispatch the event.
+    $event_dispatcher = \Drupal::service('event_dispatcher'); # service to dispatch the event.
+    $event_dispatcher->dispatch($event, UserLoginEvent::EVENT_NAME);#dispatching the event and passing.
+}
