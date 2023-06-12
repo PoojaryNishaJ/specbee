@@ -1,54 +1,69 @@
 <?php
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\EntityInterface;
 /**
  * @file
  * Contains nishaj_exercise.module.
  */
 
- use Drupal\nishaj_exercise\Event\UserLoginEvent; #included the event that is cteated that is user login event to use the constant variable here.
+use Drupal\Core\Form\FormStateInterface;
+/**
+ * @file
+ * Contains nishaj_exercise.module.
+ */
 
-//nisha_exercise_form_alter():  used to alter form.
-//$form: The form array being altered.
-//$form_state: An object representing the current state of the form.
-//$form_id: The unique ID of the form.
+use Drupal\nishaj_exercise\Event\UserLoginEvent;
 
+// Included the event that is created that is user login event.
+// To use the constant variable here.
+
+/**
+ * Nisha_exercise_form_alter():  used to alter form.
+ */
 function nishaj_exercise_form_alter(&$form, FormStateInterface $form_state, $form_id) {
 
-     // $route = \Drupal::routeMatch()->getRouteName();
-     // print_r($route);
-      //exit;
-    $data=\Drupal::service('custom_service')->getName();  // returns the name of a configuration form
-     // print_r($data);
-      //exit;
-
-
+  // The $route = \Drupal::routeMatch()->getRouteName().
+  // Print_r($route).
+  // Exit.
+  $data = \Drupal::service('custom_service')->getName();
+  // Returns the name of a configuration form
+  // Print_r($data);
+  // exit;
 }
-
 
 /**
  * Implements hook_theme().
  */
-function nishaj_exercise_theme($existing, $type, $theme, $path) {   //nishaj_exercise_theme used to define new hook theme.
+function nishaj_exercise_theme($existing, $type, $theme, $path) {
+  // Nishaj_exercise_theme used to define new hook theme.
+  return [
+    'block_plugin_template' => [
+                // Name of the template file.
+      'variables' => [
+                    // Defined variables.
+        'text' => "",
+        'hexcode' => "",
+      ],
+    ],
+  ];
+}
 
-    return [
-            'block_plugin_template' => [   //name of the template file.
-                'variables' => [           //defined variables
-                    'text' => "",
-                    'hexcode' =>"",
-                ],
-            ],
-        ];
-    }
 /**
  * Implements hook_user_login().
  */
 function nishaj_exercise_user_login($account) {
-    // Instantiate our event.
-    $event = new UserLoginEvent($account); # Initializing the object for the event.
+  // Instantiate our event.
+  $event = new UserLoginEvent($account);
+  // Initializing the object for the event.
+  // Get the event_dispatcher service and dispatch the event.
+  $event_dispatcher = \Drupal::service('event_dispatcher');
+  // Service to dispatch the event.
+  $event_dispatcher->dispatch($event, UserLoginEvent::EVENT_NAME);
+  // Dispatching the event and passing the argument of event object to this.
+}
 
-    // Get the event_dispatcher service and dispatch the event.
-    $event_dispatcher = \Drupal::service('event_dispatcher'); # service to dispatch the event.
-    $event_dispatcher->dispatch($event, UserLoginEvent::EVENT_NAME);#dispatching the event and passing.
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function nishaj_exercise_page_attachments_alter(array &$attachments) {
+  $attachments['#attached']['library'][] = 'nishaj_exercise/css_lib';
 }

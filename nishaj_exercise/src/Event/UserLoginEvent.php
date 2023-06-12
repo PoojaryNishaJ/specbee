@@ -2,7 +2,8 @@
 
 namespace Drupal\nishaj_exercise\Event;
 
-use Drupal\Component\EventDispatcher\Event;  # included the class name event.
+// Included the class name event.
+use Drupal\Component\EventDispatcher\Event;
 use Drupal\user\UserInterface;
 
 /**
@@ -11,23 +12,31 @@ use Drupal\user\UserInterface;
 class UserLoginEvent extends Event {
 
   // This makes it easier for subscribers to reliably use our event name.
-const EVENT_NAME = 'custom_events_user_login'; # name of the event.The event get dispatched when the user get logged in into the system.
+  // Name of the event.The event get dispatched.
+  // When the user get logged in into the system.
+  const EVENT_NAME = 'custom_events_user_login';
 
-/**
+  /**
    * The user account.
    *
    * @var \Drupal\user\UserInterface
+   *   This is the user interface.
    */
-public $account;  # using the current user account.
+  public $account;
 
-/**
+  /**
    * Constructs the object.
    *
    * @param \Drupal\user\UserInterface $account
    *   The account of the user logged in.
    */
-public function __construct(UserInterface $account) { # from the dispatch function we will be passing the account object here and set.
+
+  /**
+   * From the dispatch function we will pass the account object here and set.
+   */
+  public function __construct(UserInterface $account) {
+
     $this->account = $account;
-}
+  }
 
 }

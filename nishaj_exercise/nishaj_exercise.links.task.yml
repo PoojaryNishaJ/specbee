@@ -12,5 +12,3 @@ exercise.page:                        # The machine name
   route_name: exercise.page           # The name of the route that menu tab is linked to.
   title: 'controller'                 # Title for the menu tab.
   base_route: exercise.custom_form    # The name of the base route with which the menu tab is associated with.
-
-

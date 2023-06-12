@@ -7,4 +7,3 @@ services:
     class: '\Drupal\nishaj_exercise\EventSubscriber\CustomConfigEventsSubscriber'   # class name in which it should get called.
     tags:                              # tag is applied to the service, indicating that it should be treated as an event subscriber.
       - { name: 'event_subscriber' }   # tag name.
-

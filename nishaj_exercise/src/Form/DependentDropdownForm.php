@@ -1,73 +1,119 @@
 <?php
 
-namespace Drupal\nishaj_exercise\Form;    # defines the namespace for the form class.
+namespace Drupal\nishaj_exercise\Form;
 
-use Drupal\Core\Form\FormBase;            # The FormBase class is the base class for forms
-use Drupal\Core\Form\FormStateInterface;  # The FormStateInterface interface provides a way to interact with the state of the form during processing and validation.
+// Defines the namespace for the form class.
+use Drupal\Core\Form\FormBase;
+// The FormBase class is the base class for forms.
+use Drupal\Core\Form\FormStateInterface;
 
+// FormStateInterface interface provides way to interact.
+// With the state of the form during processing and validation.
+/**
+ * Form Interactions.
+ */
 class DependentDropdownForm extends FormBase {
 
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {             # sets the unique ID of the form
-    return 'dependent_dropdown_form';       # The ID is set to 'custom_form_user_details'.
+  public function getFormId() {
+    // Sets the unique ID of the form.
+    return 'dependent_dropdown_form';
+    // The ID is set to 'custom_form_user_details'.
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {         # used to build the form.
-    $countries = static::getCountries();  #  fetch the list of countries static::getCountries() will call the getCountries() method defined in the DependentDropdownForm class.
-    $defaultCountry = $form_state->getValue('country') ?? 'none';  # set the default value for the Country dropdown based on the previously selected value or 'none' if no value is available.
-
-    $form['country'] = [     #sets up the Country dropdown element in the form
-      '#type' => 'select',    #specifies that the form element is a dropdown/select list.
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    // Used to build the form.
+    $countries = static::getCountries();
+    // Fetch the list of countries static::getCountries()
+    // Will call the getCountries() method
+    // Defined in the DependentDropdownForm class.
+    $defaultCountry = $form_state->getValue('country') ?? 'none';
+    // Set the default value for the Country dropdown
+    // Based on the previously selected value or none if no value is available.
+    $form['country'] = [
+      // Sets up the Country dropdown element in the form.
+      '#type' => 'select',
+      // Specifies that the form element is a dropdown/select list.
       '#title' => 'Country',
-      '#options' => $countries,   #assigns the array of country options (retrieved from the getCountries() method) to the dropdown options. This array will be used to populate the available options in the dropdown.
-      '#default_value' => $defaultCountry,  #sets the default value for the dropdown to the previously selected value (retrieved from the form state) or 'none' if no value is available.
+      '#options' => $countries,
+      // Assigns the array of country
+      // Options(retrieved from getCountries() method) to dropdown options.
+      // This array will be used to populate the available options in dropdown.
+      '#default_value' => $defaultCountry,
+      // Sets the default value for the dropdown
+      // To the previously selected value(retrieved from the form state).
+      // Or none if no value is available.
       '#ajax' => [
-        'callback' => '::updateStatesDropdown', # triggers the updateStatesDropdown() method when the dropdown value is changed.
-        'wrapper' => 'states-container',   #The updated content will be loaded into the HTML element with the ID 'states-container'.
+        'callback' => '::updateStatesDropdown',
+        // Triggers this method when dropdown value changes.
+        'wrapper' => 'states-container',
+        // The updated content will be loaded into the HTML element.
+        // With the ID 'states-container'.
         'event' => 'change',
       ],
     ];
 
-    $selectedCountry = $form_state->getValue('country') ?? $defaultCountry;  #retrieves the value of the 'country' form element from the form state
-    $states = static::getStates($selectedCountry);#calls the getStates() method, passing the selected country value ($selectedCountry) as the argument. getStates() method will return an array of states based on the selected country.
-    $defaultState = $form_state->getValue('state') ?? '';  #checks selected state value.
-
-    $form['states_container'] = [   # the container is likely used to wrap the State dropdown and its related elements, such as the label or any validation messages, and provide a target wrapper for AJAX updates.
+    $selectedCountry = $form_state->getValue('country') ?? $defaultCountry;
+    // Retrieves the value of the 'country' form element from the form state.
+    $states = static::getStates($selectedCountry);
+    // Calls this method passes the selected country value ($selectedCountry).
+    // As the argument getStates() method will return.
+    // An array of states based on the selected country.
+    $defaultState = $form_state->getValue('state') ?? '';
+    // Checks selected state value.
+    $form['states_container'] = [
+      // The container is likely used to wrap the State dropdown.
+      // And its related elements, such as the label or any validation messages.
+      // And provide a target wrapper for AJAX updates.
       '#type' => 'container',
       '#attributes' => ['id' => 'states-container'],
     ];
 
-    $form['states_container']['state'] = [   # adds the State dropdown element
-      '#type' => 'select',      #This line sets the element type of the State dropdown to 'select'.
-      '#title' => 'State',    #sets the title or label for the State dropdown
-      '#options' => $states,   #sets the available options for the State dropdown
-      '#default_value' => $defaultState,  #sets the default value for the State dropdown
-      '#ajax' => [      #sets up AJAX functionality for the State dropdown
+    $form['states_container']['state'] = [
+      // Adds the State dropdown element.
+      '#type' => 'select',
+      // This line sets the element type of the State dropdown to 'select'.
+      '#title' => 'State',
+      // Sets the title or label for the State dropdown.
+      '#options' => $states,
+      // Sets the available options for the State dropdown.
+      '#default_value' => $defaultState,
+      // Sets the default value for the State dropdown.
+      '#ajax' => [
+        // Sets up AJAX functionality for the State dropdown.
         'callback' => '::updateDistrictsDropdown',
         'wrapper' => 'states-district-container',
         'event' => 'change',
       ],
     ];
 
-    $selectedState = $form_state->getValue('state') ?? $defaultState; # retrieves the selected state value from the form state
-    $districts = static::getDistricts($selectedState);   #fetches the districts associated with that state.
-    $defaultDistrict = $form_state->getValue('district') ?? '';  #retrieves the district value from the form state
-
-    $form['states_district_container'] = [  # to group the District dropdown
+    $selectedState = $form_state->getValue('state') ?? $defaultState;
+    // Retrieves the selected state value from the form state.
+    $districts = static::getDistricts($selectedState);
+    // Fetches the districts associated with that state.
+    $defaultDistrict = $form_state->getValue('district') ?? '';
+    // Retrieves the district value from the form state.
+    // To group the District dropdown.
+    $form['states_district_container'] = [
       '#type' => 'container',
       '#attributes' => ['id' => 'states-district-container'],
     ];
 
-    $form['states_district_container']['district'] = [  # adds the district dropdown element
-      '#type' => 'select',                              #This line sets the element type of the District dropdown to 'select'.
-      '#title' => 'District',                            #sets the title or label
-      '#options' => $districts,                        #sets the available option
-      '#default_value' => $defaultDistrict,           #sets the default value
+    $form['states_district_container']['district'] = [
+      // Adds the district dropdown element.
+      '#type' => 'select',
+      // This line sets the element type of the District dropdown to 'select'.
+      '#title' => 'District',
+      // Sets the title or label.
+      '#options' => $districts,
+      // Sets the available option.
+      '#default_value' => $defaultDistrict,
+      // Sets the default value.
     ];
 
     $form['submit'] = [
@@ -92,6 +138,9 @@ class DependentDropdownForm extends FormBase {
     return $form['states_container'];
   }
 
+  /**
+   * The district will be updated.
+   */
   public function updateDistrictsDropdown(array &$form, FormStateInterface $form_state) {
     return $form['states_district_container'];
   }
@@ -121,6 +170,7 @@ class DependentDropdownForm extends FormBase {
           'tn' => 'Tamil Nadu',
         ];
         break;
+
       case 'us':
         $states = [
           'none' => '- Select State -',
@@ -129,6 +179,7 @@ class DependentDropdownForm extends FormBase {
           'tx' => 'Texas',
         ];
         break;
+
       case 'uk':
         $states = [
           'none' => '- Select Region -',
@@ -137,6 +188,7 @@ class DependentDropdownForm extends FormBase {
           'wal' => 'Wales',
         ];
         break;
+
       default:
         $states = ['none' => '- Select State -'];
         break;
@@ -158,6 +210,7 @@ class DependentDropdownForm extends FormBase {
           'mys' => 'Mysore',
         ];
         break;
+
       case 'ma':
         $districts = [
           'none' => '- Select District -',
@@ -166,6 +219,7 @@ class DependentDropdownForm extends FormBase {
           'nag' => 'Nagpur',
         ];
         break;
+
       case 'tn':
         $districts = [
           'none' => '- Select District -',
@@ -174,6 +228,7 @@ class DependentDropdownForm extends FormBase {
           'mdr' => 'Madurai',
         ];
         break;
+
       default:
         $districts = ['none' => '- Select District -'];
         break;

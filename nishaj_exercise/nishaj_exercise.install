@@ -1,39 +1,138 @@
 <?php
 
 /**
- * implements hook_schema().
+ * @file
+ * To define and manage database schema.
  */
-function nishaj_exercise_schema() {   # This function creates table user_details in the database.
-    $schema['user_details'] = [       # The argument along with table name and inside the array mention all the details about the table.
-        'description' => 'Contains user details',  # The field and the field description.
-        'fields' => [
-            'id' => [
-                'description' => 'holds id',
-                'type' => 'serial',
-                'not null' => true
-            ],
-            'firstname' => [
-                'description' => 'Firstname of the user',  # The field and the field description.
-                'type' => 'varchar',
-                'length' => 60,
-                'not null' => true,
-            ],
-            'email' => [
-                'description' => 'Email of the user',  # The field and the field description.
-                'type' => 'varchar',
-                'length' => 60,
-                'not null' => true,
-            ],
-            'gender' => [
-                'description' => 'gender of the user',   # The field and the field description.
-                'type' => 'varchar',
-                'length' => 60,
-                'not null' => true,
-            ],
-        ],
-        'primary key' => ['id'],  # the primary key field.
-    ];
-    return $schema;
+
+namespace Drupal\nishaj_exercise;
+
+/**
+ * @file
+ * To define and manage database schema.
+ */
+
+use Drupal\node\Entity\Node;
+
+/**
+ * @file
+ * To define and manage database schema.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function nishaj_exercise_schema() {
+  // This function creates table user_details in the database.
+  // The argument along with table name.
+  // And inside the array mention all the details about the table.
+  $schema['user_details'] = [
+  // The field and the field description.
+    'description' => 'Contains user details',
+    'fields' => [
+      'id' => [
+        'description' => 'holds id',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'firstname' => [
+        // The field and the field description.
+        'description' => 'Firstname of the user',
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+      ],
+      'email' => [
+        // The field and the field description.
+        'description' => 'Email of the user',
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+      ],
+      'gender' => [
+        // The field and the field description.
+        'description' => 'gender of the user',
+        'type' => 'varchar',
+        'length' => 60,
+        'not null' => TRUE,
+      ],
+    ],
+      // The primary key field.
+    'primary key' => ['id'],
+  ];
+  return $schema;
 }
 
+/*
+ * Implement hook_update_N().
+ */
 
+/**
+ * Make change on config form.
+ */
+function nishaj_exercise_update_100903() {
+  $config = \Drupal::configFactory()->getEditable('nishaj_exercise.settings');
+  $config->set('email', 'nisha@gmail.com');
+  $config->save();
+}
+
+/**
+ * Setup tags field_test Form display.
+ */
+function nishaj_exercise_update_100905() {
+  $field_name = 'field_test';
+  $properties = [
+    'targetEntityType' => 'taxonomy_term',
+    'bundle' => 'tags',
+  ];
+  if ($form_displays = \Drupal::entityTypeManager()->getStorage('entity_form_display')->loadByProperties($properties)) {
+    foreach ($form_displays as $form_display) {
+      $form_display_config = [
+        'type' => 'string_textfield',
+        'settings' => [
+          'display_label' => TRUE,
+        ],
+        'weight' => 1,
+      ];
+      $form_display->setComponent($field_name, $form_display_config);
+      $form_display->save();
+    }
+  }
+}
+
+/**
+ * Setup TAGS field_test View display.
+ */
+function nishaj_exercise_update_100907() {
+  $field_name = 'field_test';
+  $properties = [
+    'targetEntityType' => 'taxonomy_term',
+    'bundle' => 'tags',
+  ];
+  if ($view_displays = \Drupal::entityTypeManager()->getStorage('entity_view_display')->loadByProperties($properties)) {
+    foreach ($view_displays as $view_display) {
+      $view_display_config = [
+        'label' => 'above',
+        'region' => 'hidden',
+      ];
+      $view_display->setComponent($field_name, $view_display_config);
+      $view_display->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function nishaj_exercise_update_100901() {
+  $query = \Drupal::entityQuery('node')
+    ->accessCheck(TRUE)
+    ->condition('type', 'basic page');
+  $nids = $query->execute();
+  $nodes = Node::loadMultiple($nids);
+  foreach ($nodes as $node) {
+    $node->setTitle(strtoupper($node->getTitle()));
+    $node->save();
+  }
+  \Drupal::messenger()->addMessage('Article titles updated');
+}

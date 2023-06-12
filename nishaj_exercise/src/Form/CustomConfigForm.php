@@ -1,76 +1,118 @@
 <?php
 
-namespace Drupal\nishaj_exercise\Form;            # defines the namespace for the form class.
+namespace Drupal\nishaj_exercise\Form;
 
-use Drupal\Core\Form\ConfigFormBase;              # imports the ConfigFormBase class.
-use Drupal\Core\Form\FormStateInterface;          # imports the FormStateInterface
+// Defines the namespace for the form class.
+use Drupal\Core\Form\ConfigFormBase;
+// Imports the ConfigFormBase class.
+use Drupal\Core\Form\FormStateInterface;
 
-class CustomConfigForm extends ConfigFormBase {   # The CustomConfigForm class extends ConfigFormBase and defines the below methods.
+/**
+ * Imports the FormStateInterface.
+ */
+class CustomConfigForm extends ConfigFormBase {
+  // The CustomConfigForm class extends.
+  // ConfigFormBase and defines the below methods.
+  /**
+   * Settings Variable.
+   */
+  const CONFIGNAME = "nishaj_exercise.settings";
+  // The constant CONFIGNAME is declared.
+  // With a value of "nishaj_exercise.settings".
 
-    /**
-     * Settings Variable.
-     */
-    Const CONFIGNAME = "nishaj_exercise.settings"; # The constant CONFIGNAME is declared with a value of "nishaj_exercise.settings"
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    // GetFormId() method returns the ID of the form.
+    return "nishaj_exercise_settings";
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getFormId() {                  # getFormId() method returns the ID of the form.
-        return "nishaj_exercise_settings";
-    }
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEditableConfigNames() {
+    // Returns the name of the configuration objects.
+    return [
+      static::CONFIGNAME,
+    ];
+  }
 
-    /**
-     * {@inheritdoc}
-     */
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state) {
+    // The buildForm() method is used to build the form.
+    $config = $this->config(static::CONFIGNAME);
+    // Retrieves the configuration object for the configuration.
+    // With the name specified in the CONFIGNAME constant.
+    $form['fullname'] = [
+          // Creates an array that defines the form element for the "fullname".
+      '#type' => 'textfield',
+           // Indicates text field.
+      '#title' => ' <span>Name</span>',
+          // Sets the label for the form element as "Name".
+          // With the HTML <span> tag used to style the label.
+      '#attached' => [
+              // Attaches CSS library nishaj_exercise/css_lib to form element.
+              // Which allows the styles defined in that library.
+              // To be applied to the element.
+        'library' => [
+          'nishaj_exercise/css_lib',
+        ],
+      ],
+      '#default_value' => $config->get("fullname"),
+          // Sets the default value for the form element.
+          // To the current value of the fullname.
+    ];
 
-    protected function getEditableConfigNames() {  # returns the name of the configuration objects
-        return [
-            static::CONFIGNAME,
-        ];
-    }
+    $form['email'] = [
+          // A form element for email field.
+      '#type' => 'email',
+          // Field type for email.
+      '#title' => 'Email',
+          // Title for email.
+      '#default_value' => $config->get("email"),
+          // Get() method this means that.
+          // If a value has been previously set for this field.
+          // It will be pre-populated with that value when the form is loaded.
+    ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(array $form, FormStateInterface $form_state) {   # The buildForm() method is used to build the form.
-        $config = $this->config(static::CONFIGNAME);                           #  retrieves the configuration object for the configuration with the name specified in the CONFIGNAME constant.
-        $form['fullname']=[                                                    # creates an array that defines the form element for the "fullname" field.
-            '#type' => 'textfield',                                            # indicates text field.
-            '#title' => ' <span>Name</span>',                                  # sets the label for the form element as "Name", with the HTML <span> tag used to style the label.
-            '#attached' => [                                                   # attaches the CSS library named "nishaj_exercise/css_lib" to the form element, which allows the styles defined in that library to be applied to the element.
-                'library' => [
-                    'nishaj_exercise/css_lib',
-                ],
-            ],
-            '#default_value' => $config->get("fullname"),                      # sets the default value for the form element to the current value of the fullname.
+    $form['place'] = [
+          // A form element for place field.
+      '#type' => 'textfield',
+          // Field type for place.
+      '#title' => 'Place',
+          // Field title for place.
+      '#default_value' => $config->get("place"),
+          // Get() method this means that if a value has been previously set.
+          // For this field, it will be pre-populated.
+          // With that value when the form is loaded.
+    ];
 
-        ];
+    return parent::buildForm($form, $form_state);
+    // The Parent::buildForm($form, $form_state).
+    // Method is called to ensure that.
+    // The parent class's buildForm() method is executed.
+  }
 
-        $form['email'] = [                               # a form element for email field.
-            '#type' => 'email',                          # field type for email.
-            '#title' => 'Email',                         # title for email.
-            '#default_value' => $config->get("email"),   # get() method this means that if a value has been previously set for this field, it will be pre-populated with that value when the form is loaded.
-        ];
-
-        $form['place'] = [           # a form element for place field.
-            '#type' => 'textfield',  # field type for place.
-            '#title' => 'Place',     # field title for place.
-            '#default_value' => $config->get("place"),   # get() method this means that if a value has been previously set for this field, it will be pre-populated with that value when the form is loaded.
-        ];
-
-        return Parent::buildForm($form, $form_state);    #  The Parent::buildForm($form, $form_state) method is called to ensure that the parent class's buildForm() method is executed.
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function submitForm(array &$form, FormStateInterface $form_state) {   # The submitForm method is used to handle the form submission
-        $config = $this->config(static::CONFIGNAME);
-        $config->set("fullname", $form_state->getValue('fullname'));   # used to set the corresponding configuration values using $config->set() for fullname.
-        $config->set("email", $form_state->getValue('email'));         # used to set the corresponding configuration values using $config->set() for email.
-        $config->set("place", $form_state->getValue('place'));         # used to set the corresponding configuration values using $config->set() for place.
-        $config->save();                                               # To save the configuration object.
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    // The submitForm method is used to handle the form submission.
+    $config = $this->config(static::CONFIGNAME);
+    $config->set("fullname", $form_state->getValue('fullname'));
+    // Used to set the corresponding.
+    // Configuration values using $config->set() for fullname.
+    $config->set("email", $form_state->getValue('email'));
+    // Used to set the corresponding.
+    // Configuration values using $config->set() for email.
+    $config->set("place", $form_state->getValue('place'));
+    // Used to set the corresponding.
+    // Configuration values using $config->set() for place.
+    $config->save();
+    // To save the configuration object.
+  }
 
 }
-
