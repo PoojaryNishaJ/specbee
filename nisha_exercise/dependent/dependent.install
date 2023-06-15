@@ -1,0 +1,177 @@
+<?php
+/**
+ * Implements hook_install().
+ */
+function dependent_schema() {
+    // Create the custom table.
+      $schema['dropdown_data'] = array(
+        'description' => 'Stores country, state, and city data',
+        'fields' => array(
+          'id' => array(
+            'type' => 'serial',
+            'unsigned' => TRUE,
+            'not null' => TRUE,
+            'description' => 'Primary key of the table',
+          ),
+          'countries' => array(
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'description' => 'Country name',
+          ),
+          'states' => array(
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'description' => 'State name',
+          ),
+          'districts' => array(
+            'type' => 'varchar',
+            'length' => 255,
+            'not null' => TRUE,
+            'description' => 'City name',
+          ),
+        ),
+        'primary key' => array('id'),
+      );
+
+      // Insert initial data.
+      $data = array(
+        array('countries' => 'India', 'states' => 'Karnataka', 'districts' => 'Mangalore'),
+        array('countries' => 'India', 'states' => 'Karnataka', 'districts' => 'Mysore'),
+        array('countries' => 'India', 'states' => 'Goa', 'districts' => 'Panaji'),
+        array('countries' => 'Nepal', 'states' => 'kerala', 'districts' => 'Kocchi'),
+        array('countries' => 'Nepal', 'states' => 'Kerala', 'districts' => 'Kollam'),
+      );
+      return $schema;
+      return $data;
+      foreach ($data as $item) {
+        db_insert('dropdown_data')
+          ->fields($item)
+          ->execute();
+      }
+
+
+  }
+
+  function dependent_update_100916() {
+    $database = \Drupal::database();
+    $schema = $database->schema();
+
+    // Create the country table
+    $country_table_name = 'countries';
+    $country_table_schema = [
+      'fields' => [
+        'id' => [
+          'type' => 'serial',
+          'size' => 'big',
+          'not null' => TRUE,
+        ],
+        'name' => [
+          'type' => 'varchar',
+          'not null' => TRUE,
+          'length' => 100,
+        ],
+      ],
+      'primary key' => ['id'],
+    ];
+    $schema->createTable($country_table_name, $country_table_schema);
+
+    // Insert values into the countrie table
+    $countries = [
+      ['name' => 'India'],
+      ['name' => 'Nepal'],
+      ['name' => 'Srilanka'],
+    ];
+    foreach ($countries as $country) {
+      $database->insert($country_table_name)
+        ->fields($country)
+        ->execute();
+    }
+
+    // Create the state table
+    $state_table_name = 'states';
+    $state_table_schema = [
+      'fields' => [
+        'id' => [
+          'type' => 'serial',
+          'size' => 'big',
+          'not null' => TRUE,
+        ],
+        'country_id' => [
+          'type' => 'int',
+          'not null' => TRUE,
+        ],
+        'name' => [
+          'type' => 'varchar',
+          'not null' => TRUE,
+          'length' => 100,
+        ],
+      ],
+      'primary key' => ['id'],
+      'foreign keys' => [
+        'country_id' => [
+          'table' => 'country',
+          'column' => 'id',
+        ],
+      ],
+    ];
+    $schema->createTable($state_table_name, $state_table_schema);
+
+    // Insert values into the state table
+    $states = [
+      ['country_id' => 1, 'name' => 'Karnataka'],
+      ['country_id' => 1, 'name' => 'Maharashtra'],
+      ['country_id' => 2, 'name' => 'Goa'],
+      ['country_id' => 2, 'name' => 'kerala'],
+      ['country_id' => 3, 'name' => 'Bihar'],
+    ];
+    foreach ($states as $state) {
+      $database->insert($state_table_name)
+        ->fields($state)
+        ->execute();
+    }
+
+    // Create the district table
+    $district_table_name = 'districts';
+    $district_table_schema = [
+      'fields' => [
+        'id' => [
+          'type' => 'serial',
+          'size' => 'big',
+          'not null' => TRUE,
+        ],
+        'state_id' => [
+          'type' => 'int',
+          'not null' => TRUE,
+        ],
+        'name' => [
+          'type' => 'varchar',
+          'not null' => TRUE,
+          'length' => 100,
+        ],
+      ],
+      'primary key' => ['id'],
+      'foreign keys' => [
+        'state_id' => [
+          'table' => 'state',
+          'column' => 'id',
+        ],
+      ],
+    ];
+    $schema->createTable($district_table_name, $district_table_schema);
+
+    // Insert values into the district table
+    $districts = [
+      ['state_id' => 1, 'name' => 'Manglore'],
+      ['state_id' => 1, 'name' => 'Mysore'],
+      ['state_id' => 2, 'name' => 'Panaji'],
+      ['state_id' => 2, 'name' => 'Kocchi'],
+      ['state_id' => 3, 'name' => 'Kollam'],
+    ];
+    foreach ($districts as $district) {
+      $database->insert($district_table_name)
+        ->fields($district)
+        ->execute();
+    }
+  }

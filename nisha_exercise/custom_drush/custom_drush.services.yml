@@ -1,0 +1,6 @@
+services:
+  custom_drush.commands:
+    class: \Drupal\custom_drush\Commands\DrushHelpersCommands
+    arguments: ['@entity_type.manager'] # To load any node or users
+    tags:
+      - { name: drush.command }  # Telling the user its a tag of drush

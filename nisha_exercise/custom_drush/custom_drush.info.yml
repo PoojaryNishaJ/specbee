@@ -1,0 +1,4 @@
+name: custom drush
+description: Custom Drush command
+type: module
+core_version_requirement: ^8 || ^9 || ^10
