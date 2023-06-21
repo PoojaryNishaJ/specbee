@@ -31,3 +31,11 @@ dependent.form:                                                      #  route na
     _title: 'Dependent Dropdown'                                      # title for the page.
   requirements:
     _permission: 'access content'                                      # users should have this permission to access the content.
+
+dependent.country_state_district_form:
+  path: '/country-state-district-form'
+  defaults:
+    _form: '\Drupal\dependent\Form\CountryStateDistrictForm'
+    _title: 'Country State District Form'
+  requirements:
+    _permission: 'access content'

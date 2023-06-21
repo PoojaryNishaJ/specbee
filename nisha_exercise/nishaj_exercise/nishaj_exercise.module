@@ -65,5 +65,27 @@ function nishaj_exercise_user_login($account) {
  * Implements hook_page_attachments_alter().
  */
 function nishaj_exercise_page_attachments_alter(array &$attachments) {
-  $attachments['#attached']['library'][] = 'nishaj_exercise/css_lib';
+  $custom_variable = 'Hello!';
+  $variables['#attached']['library'][] = 'your_module_name/custom';
+  $variables['#attached']['drupalSettings']['yourModule']['customVariable'] = $custom_variable;
+  // $attachments['#attached']['library'][] = 'nishaj_exercise/css_lib';
+  // $attachments['#attached']['drupalSettings']['nishaj_exercise']['color_body'] = "testing";
+}
+/**
+ * Implements hook_entity_view_alter().
+ */
+function nishaj_exercise_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  // Check the entity type and bundle.
+  if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'article') {
+    $build['#title'] = 'Modified Title';
+  }
+}
+/**
+ * Implements hook_entity_view().
+ */
+function nishaj_exercise_entity_view(array &$build, EntityInterface $entity, $view_mode, $langcode) {
+  // Check the entity type and bundle.
+  if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'article') {
+    $build['body'][0]['#text'] .= ' Text added.';
+  }
 }

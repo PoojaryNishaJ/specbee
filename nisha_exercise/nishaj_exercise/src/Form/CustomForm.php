@@ -2,33 +2,67 @@
 
 namespace Drupal\nishaj_exercise\Form;
 
-// Defines the namespace for the form class.
 use Drupal\Core\Form\FormBase;
-// The FormBase class is the base class for forms.
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Database\Connection;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 
-// FormStateInterface interface provides way to interact.
-// With the state of the form during processing and validation.
 /**
  * Form Interactions.
  */
 class CustomForm extends FormBase {
 
   /**
-   * Gets form id.
+   * The messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
    */
-  public function getFormId() {
-    // Sets the unique ID of the form.
-    return 'custom_form_user_details';
-    // The ID is set to 'custom_form_user_details'.
+  protected $messenger;
+
+  /**
+   * The database service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
+   * CustomForm constructor.
+   *
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database service.
+   */
+  public function __construct(MessengerInterface $messenger, Connection $database) {
+    $this->messenger = $messenger;
+    $this->database = $database;
   }
 
   /**
-   * Builds generic form.
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('messenger'),
+      $container->get('database')
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return 'custom_form_user_details';
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    // Used to build the form.
-    // Input fields.
     $form['firstname'] = [
       '#type' => 'textfield',
       '#title' => 'First Name',
@@ -47,30 +81,60 @@ class CustomForm extends FormBase {
         'female' => 'Female',
       ],
     ];
+    $form['permanent_address'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Permanent Address'),
+    '#attributes' => array('class' => array('address-checkbox')),
+  );
+
+  $form['temporary_address'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Temporary Address'),
+    '#attributes' => array('class' => array('address-checkbox')),
+  );
+
+
+  $form['#attached']['library'][] = "nishaj_exercise/custom";
+  $form['#attached']['drupalSettings']['nisha_exercise'] = array(
+    'addressCheckboxClass' => 'address-checkbox',
+  );
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => 'Submit',
+      '#ajax'=> [
+        'callback' => '::setAjaxSubmit',
+      ],
     ];
     return $form;
-
   }
 
   /**
-   * Handles the form submission.
+   * {@inheritdoc}
    */
+  public function setAjaxSubmit() {
+    $response = new AjaxResponse();
+    $response->addCommand(new InvokeCommand("html", 'datacheck'));
+    return $response;
+  }
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    if (strlen($form_state->getValue('firstname')) < 3) {
+      $form_state->setErrorByName('firstname', $this->t('Too less content'));
+    }
+      $email = $form_state->getValue('email');
+      if (!preg_match('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}', $email)) {
+        $form_state->setErrorByName('email', $this->t('Invalid email format'));
+      }
+  }
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // To handle the form submission.
-    \Drupal::messenger()->addMessage("User Details Submitted Successfully");
-    \Drupal::database()->insert("user_details")->fields([
-          // Used to initialize the  database service.
+    $this->messenger->addMessage("User Details Submitted Successfully");
+    $this->database->insert("user_details")->fields([
       'firstname' => $form_state->getValue("firstname"),
-          // Used to get the first name value.
       'email' => $form_state->getValue("email"),
-          // Used to get the email value.
       'gender' => $form_state->getValue("gender"),
-          // Used to get the gender value.
     ])->execute();
-
   }
 
 }

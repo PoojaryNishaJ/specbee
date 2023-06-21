@@ -6,6 +6,7 @@ namespace Drupal\nishaj_exercise\Form;
 use Drupal\Core\Form\FormBase;
 // The FormBase class is the base class for forms.
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Database\Connection;
 
 // FormStateInterface interface provides way to interact.
 // With the state of the form during processing and validation.

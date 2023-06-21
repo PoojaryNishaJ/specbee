@@ -1,0 +1,4 @@
+name: 'custom title'               # Name of the module.
+description: 'custom title'    # A brief description about the module.
+type: module                           # Mention the type of folder.
+core_version_requirement: ^9 || ^10    # Version of Drupal core that the module requires.

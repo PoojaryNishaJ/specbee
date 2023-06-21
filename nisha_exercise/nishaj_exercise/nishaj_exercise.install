@@ -22,46 +22,46 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_schema().
  */
-function nishaj_exercise_schema() {
-  // This function creates table user_details in the database.
-  // The argument along with table name.
-  // And inside the array mention all the details about the table.
-  $schema['user_details'] = [
-  // The field and the field description.
-    'description' => 'Contains user details',
-    'fields' => [
-      'id' => [
-        'description' => 'holds id',
-        'type' => 'serial',
-        'not null' => TRUE,
-      ],
-      'firstname' => [
-        // The field and the field description.
-        'description' => 'Firstname of the user',
-        'type' => 'varchar',
-        'length' => 60,
-        'not null' => TRUE,
-      ],
-      'email' => [
-        // The field and the field description.
-        'description' => 'Email of the user',
-        'type' => 'varchar',
-        'length' => 60,
-        'not null' => TRUE,
-      ],
-      'gender' => [
-        // The field and the field description.
-        'description' => 'gender of the user',
-        'type' => 'varchar',
-        'length' => 60,
-        'not null' => TRUE,
-      ],
-    ],
-      // The primary key field.
-    'primary key' => ['id'],
-  ];
-  return $schema;
-}
+// function nishaj_exercise_schema() {
+//   // This function creates table user_details in the database.
+//   // The argument along with table name.
+//   // And inside the array mention all the details about the table.
+//   $schema['user_details'] = [
+//   // The field and the field description.
+//     'description' => 'Contains user details',
+//     'fields' => [
+//       'id' => [
+//         'description' => 'holds id',
+//         'type' => 'serial',
+//         'not null' => TRUE,
+//       ],
+//       'firstname' => [
+//         // The field and the field description.
+//         'description' => 'Firstname of the user',
+//         'type' => 'varchar',
+//         'length' => 60,
+//         'not null' => TRUE,
+//       ],
+//       'email' => [
+//         // The field and the field description.
+//         'description' => 'Email of the user',
+//         'type' => 'varchar',
+//         'length' => 60,
+//         'not null' => TRUE,
+//       ],
+//       'gender' => [
+//         // The field and the field description.
+//         'description' => 'gender of the user',
+//         'type' => 'varchar',
+//         'length' => 60,
+//         'not null' => TRUE,
+//       ],
+//     ],
+//       // The primary key field.
+//     'primary key' => ['id'],
+//   ];
+//   return $schema;
+// }
 
 /*
  * Implement hook_update_N().
@@ -70,69 +70,246 @@ function nishaj_exercise_schema() {
 /**
  * Make change on config form.
  */
-function nishaj_exercise_update_100903() {
-  $config = \Drupal::configFactory()->getEditable('nishaj_exercise.settings');
-  $config->set('email', 'nisha@gmail.com');
-  $config->save();
-}
+// function nishaj_exercise_update_100903() {
+//   $config = \Drupal::configFactory()->getEditable('nishaj_exercise.settings');
+//   $config->set('email', 'nisha@gmail.com');
+//   $config->save();
+// }
+
+// /**
+//  * Setup tags field_test Form display.
+//  */
+// function nishaj_exercise_update_100905() {
+//   $field_name = 'field_test';
+//   $properties = [
+//     'targetEntityType' => 'taxonomy_term',
+//     'bundle' => 'tags',
+//   ];
+//   if ($form_displays = \Drupal::entityTypeManager()->getStorage('entity_form_display')->loadByProperties($properties)) {
+//     foreach ($form_displays as $form_display) {
+//       $form_display_config = [
+//         'type' => 'string_textfield',
+//         'settings' => [
+//           'display_label' => TRUE,
+//         ],
+//         'weight' => 1,
+//       ];
+//       $form_display->setComponent($field_name, $form_display_config);
+//       $form_display->save();
+//     }
+//   }
+// }
+
+// /**
+//  * Setup TAGS field_test View display.
+//  */
+// function nishaj_exercise_update_100907() {
+//   $field_name = 'field_test';
+//   $properties = [
+//     'targetEntityType' => 'taxonomy_term',
+//     'bundle' => 'tags',
+//   ];
+//   if ($view_displays = \Drupal::entityTypeManager()->getStorage('entity_view_display')->loadByProperties($properties)) {
+//     foreach ($view_displays as $view_display) {
+//       $view_display_config = [
+//         'label' => 'above',
+//         'region' => 'hidden',
+//       ];
+//       $view_display->setComponent($field_name, $view_display_config);
+//       $view_display->save();
+//     }
+//   }
+// }
+
+// /**
+//  * Implements hook_update_N().
+//  */
+// function nishaj_exercise_update_100901() {
+//   $query = \Drupal::entityQuery('node')
+//     ->accessCheck(TRUE)
+//     ->condition('type', 'basic page');
+//   $nids = $query->execute();
+//   $nodes = Node::loadMultiple($nids);
+//   foreach ($nodes as $node) {
+//     $node->setTitle(strtoupper($node->getTitle()));
+//     $node->save();
+//   }
+//   \Drupal::messenger()->addMessage('Article titles updated');
+// }
 
 /**
- * Setup tags field_test Form display.
+ * Implements hook_install().
  */
-function nishaj_exercise_update_100905() {
-  $field_name = 'field_test';
-  $properties = [
-    'targetEntityType' => 'taxonomy_term',
-    'bundle' => 'tags',
-  ];
-  if ($form_displays = \Drupal::entityTypeManager()->getStorage('entity_form_display')->loadByProperties($properties)) {
-    foreach ($form_displays as $form_display) {
-      $form_display_config = [
-        'type' => 'string_textfield',
-        'settings' => [
-          'display_label' => TRUE,
-        ],
-        'weight' => 1,
-      ];
-      $form_display->setComponent($field_name, $form_display_config);
-      $form_display->save();
+function nishaj_exercise_schema() {
+  // Create the custom table.
+    $schema['my_dropdown_data'] = array(
+      'description' => 'Stores country, state, and city data',
+      'fields' => array(
+        'id' => array(
+          'type' => 'serial',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+          'description' => 'Primary key of the table',
+        ),
+        'country' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'description' => 'Country name',
+        ),
+        'state' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'description' => 'State name',
+        ),
+        'city' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+          'description' => 'City name',
+        ),
+      ),
+      'primary key' => array('id'),
+    );
+
+    // Insert initial data.
+    $data = array(
+      array('country' => 'Country 1', 'state' => 'State 1', 'city' => 'City 1'),
+      array('country' => 'Country 1', 'state' => 'State 1', 'city' => 'City 2'),
+      array('country' => 'Country 1', 'state' => 'State 2', 'city' => 'City 3'),
+      array('country' => 'Country 2', 'state' => 'State 3', 'city' => 'City 4'),
+      array('country' => 'Country 2', 'state' => 'State 3', 'city' => 'City 5'),
+    );
+    return $schema;
+    return $data;
+    foreach ($data as $item) {
+      db_insert('my_dropdown_data')
+        ->fields($item)
+        ->execute();
     }
-  }
+
+
 }
 
-/**
- * Setup TAGS field_test View display.
- */
-function nishaj_exercise_update_100907() {
-  $field_name = 'field_test';
-  $properties = [
-    'targetEntityType' => 'taxonomy_term',
-    'bundle' => 'tags',
+function nishaj_exercise_update_100914() {
+  $database = \Drupal::database();
+  $schema = $database->schema();
+
+  // Create the country table
+  $country_table_name = 'countries';
+  $country_table_schema = [
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 100,
+      ],
+    ],
+    'primary key' => ['id'],
   ];
-  if ($view_displays = \Drupal::entityTypeManager()->getStorage('entity_view_display')->loadByProperties($properties)) {
-    foreach ($view_displays as $view_display) {
-      $view_display_config = [
-        'label' => 'above',
-        'region' => 'hidden',
-      ];
-      $view_display->setComponent($field_name, $view_display_config);
-      $view_display->save();
-    }
-  }
-}
+  $schema->createTable($country_table_name, $country_table_schema);
 
-/**
- * Implements hook_update_N().
- */
-function nishaj_exercise_update_100901() {
-  $query = \Drupal::entityQuery('node')
-    ->accessCheck(TRUE)
-    ->condition('type', 'basic page');
-  $nids = $query->execute();
-  $nodes = Node::loadMultiple($nids);
-  foreach ($nodes as $node) {
-    $node->setTitle(strtoupper($node->getTitle()));
-    $node->save();
+  // Insert values into the country table
+  $countries = [
+    ['name' => 'India'],
+    ['name' => 'Srilanka'],
+    ['name' => 'Nepal'],
+  ];
+  foreach ($countries as $country) {
+    $database->insert($country_table_name)
+      ->fields($country)
+      ->execute();
   }
-  \Drupal::messenger()->addMessage('Article titles updated');
+
+  // Create the state table
+  $state_table_name = 'state';
+  $state_table_schema = [
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'country_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 100,
+      ],
+    ],
+    'primary key' => ['id'],
+    'foreign keys' => [
+      'country_id' => [
+        'table' => 'country',
+        'column' => 'id',
+      ],
+    ],
+  ];
+  $schema->createTable($state_table_name, $state_table_schema);
+
+  // Insert values into the state table
+  $states = [
+    ['country_id' => 1, 'name' => 'State A1'],
+    ['country_id' => 1, 'name' => 'State A2'],
+    ['country_id' => 2, 'name' => 'State B1'],
+    ['country_id' => 2, 'name' => 'State B2'],
+    ['country_id' => 3, 'name' => 'State C1'],
+  ];
+  foreach ($states as $state) {
+    $database->insert($state_table_name)
+      ->fields($state)
+      ->execute();
+  }
+
+  // Create the district table
+  $district_table_name = 'district';
+  $district_table_schema = [
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'state_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'not null' => TRUE,
+        'length' => 100,
+      ],
+    ],
+    'primary key' => ['id'],
+    'foreign keys' => [
+      'state_id' => [
+        'table' => 'state',
+        'column' => 'id',
+      ],
+    ],
+  ];
+  $schema->createTable($district_table_name, $district_table_schema);
+
+  // Insert values into the district table
+  $districts = [
+    ['state_id' => 1, 'name' => 'District A1'],
+    ['state_id' => 1, 'name' => 'District A2'],
+    ['state_id' => 2, 'name' => 'District B1'],
+    ['state_id' => 2, 'name' => 'District B2'],
+    ['state_id' => 3, 'name' => 'District C1'],
+  ];
+  foreach ($districts as $district) {
+    $database->insert($district_table_name)
+      ->fields($district)
+      ->execute();
+  }
 }

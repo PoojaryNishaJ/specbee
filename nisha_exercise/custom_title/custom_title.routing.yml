@@ -1,0 +1,13 @@
+custom_title.dynamicdemo:
+  path: '/node/{node}/title'
+  defaults:
+    _controller: '\Drupal\custom_title\Controller\MyController::nodeTitle'
+    _title_callback: '\Drupal\custom_title\Controller\MyController::nodeTitlePageTitle'
+  requirements:
+    _custom_access: '\Drupal\custom_title\Controller\MyController::accessNode'
+    _permission: 'Node Permission'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: entity:node
