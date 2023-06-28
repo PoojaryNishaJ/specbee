@@ -6,7 +6,8 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\node\Entity\Node;
-use Drupal\Core\Database\Database;
+use Drupal\Core\Database\Connection;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 
 class CountryStateDistrictForm extends FormBase {

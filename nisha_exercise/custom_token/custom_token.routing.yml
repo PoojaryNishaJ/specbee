@@ -1,0 +1,9 @@
+config.customtoken:                                                      # route name
+  path: '/config/token-form'                                # path of the particular route.
+  defaults:                                                         # The path that is called.
+    _form: '\Drupal\custom_token\Form\CustomConfigForm'
+    _title: 'Custom Configuration Form'                             # title for the page.
+  requirements:
+    _permission: 'permission for config form'                       # users should have this permission to access the content.
+  options:
+    _admin_route: TRUE

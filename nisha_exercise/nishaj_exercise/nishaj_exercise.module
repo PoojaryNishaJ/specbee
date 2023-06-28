@@ -4,7 +4,8 @@
  * @file
  * Contains nishaj_exercise.module.
  */
-
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 /**
  * @file
@@ -64,22 +65,20 @@ function nishaj_exercise_user_login($account) {
 /**
  * Implements hook_page_attachments_alter().
  */
-function nishaj_exercise_page_attachments_alter(array &$attachments) {
-  $custom_variable = 'Hello!';
-  $variables['#attached']['library'][] = 'your_module_name/custom';
-  $variables['#attached']['drupalSettings']['yourModule']['customVariable'] = $custom_variable;
-  // $attachments['#attached']['library'][] = 'nishaj_exercise/css_lib';
-  // $attachments['#attached']['drupalSettings']['nishaj_exercise']['color_body'] = "testing";
-}
-/**
- * Implements hook_entity_view_alter().
- */
-function nishaj_exercise_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  // Check the entity type and bundle.
-  if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'article') {
-    $build['#title'] = 'Modified Title';
-  }
-}
+// function nishaj_exercise_page_attachments_alter(array &$attachments) {
+
+//   $attachments['#attached']['library'][] = 'nishaj_exercise/css_lib';
+//   $attachments['#attached']['drupalSettings']['nishaj_exercise']['color_body'] = "testing";
+// }
+// /**
+//  * Implements hook_entity_view_alter().
+//  */
+// function nishaj_exercise_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+//   // Check the entity type and bundle.
+//   if ($entity->getEntityTypeId() === 'node' && $entity->bundle() === 'article') {
+//     $build['#title'] = 'Modified Title';
+//   }
+// }
 /**
  * Implements hook_entity_view().
  */
@@ -89,3 +88,36 @@ function nishaj_exercise_entity_view(array &$build, EntityInterface $entity, $vi
     $build['body'][0]['#text'] .= ' Text added.';
   }
 }
+// /**
+//  * Implements hook_entity_presave()
+//  */
+// function nishaj_exercise_entity_presave(EntityInterface $entity) {.
+//   if ($entity->getEntityTypeId() === 'node') {
+//       $entity->set('title', 'Entity presaving the values');
+//     }
+//   }
+
+
+
+// /**
+//  * Implements hook_node_presave().
+//  */
+// function nishaj_exercise_node_presave($node) {
+
+//   print_r($node->getCacheTags());
+
+//   print_r($node->getCacheContext());
+//   exit;
+// }
+
+// /**
+//  * Implements hook_entity_insert()
+//  */
+//   function nishaj_exercise_entity_insert(EntityInterface $entity) {
+//     if ($entity->getType() == 'article'){
+//       print_r("entity insert");
+//       exit;
+//     }
+//   }
+
+

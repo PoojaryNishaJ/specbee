@@ -81,30 +81,29 @@ class CustomForm extends FormBase {
         'female' => 'Female',
       ],
     ];
-    $form['permanent_address'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Permanent Address'),
-    '#attributes' => array('class' => array('address-checkbox')),
-  );
+    $form['permanent'] = [
+      '#type' => 'textfield',
+      '#title' => 'permanent',
+      '#placeholder' => 'permanent address',
+    ];
+    $form['check'] = [
+      '#type' => 'checkbox',
+      '#title' => 'same as permanent',
+    ];
 
-  $form['temporary_address'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Temporary Address'),
-    '#attributes' => array('class' => array('address-checkbox')),
-  );
+    $form['temporary'] = [
+      '#type' => 'textfield',
+      '#placeholder' => 'temporary address',
+      '#title' => 'temporary',
+    ];
 
-
-  $form['#attached']['library'][] = "nishaj_exercise/custom";
-  $form['#attached']['drupalSettings']['nisha_exercise'] = array(
-    'addressCheckboxClass' => 'address-checkbox',
-  );
     $form['submit'] = [
       '#type' => 'submit',
       '#value' => 'Submit',
-      '#ajax'=> [
-        'callback' => '::setAjaxSubmit',
+      '#ajax' => [
+          'callback' => '::setAjaxSubmit',
       ],
-    ];
+  ];
     return $form;
   }
 

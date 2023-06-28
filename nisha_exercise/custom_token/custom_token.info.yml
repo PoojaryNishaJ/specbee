@@ -1,0 +1,7 @@
+name: 'custom token'               # Name of the module.
+description: 'exercise description'    # A brief description about the module.
+type: module                           # Mention the type of folder.
+core_version_requirement: ^9 || ^10    # Version of Drupal core that the module requires.
+
+# This file contains meta data of the custom module.
+# This is the only file used to install the new module.

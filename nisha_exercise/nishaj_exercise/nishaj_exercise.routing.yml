@@ -39,3 +39,11 @@ dependent.country_state_district_form:
     _title: 'Country State District Form'
   requirements:
     _permission: 'access content'
+
+custom-modal-page:
+  path: '/modal-form-link'
+  defaults:
+    _controller: '\Drupal\nishaj_exercise\Controller\CustomController::modalLink'
+    _title: 'Open modal page'
+  requirements:
+    _permission: 'access content'

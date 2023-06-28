@@ -62,3 +62,4 @@ class CustomBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
 }
+

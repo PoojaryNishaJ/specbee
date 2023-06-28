@@ -1,47 +1,34 @@
-(function ($, Drupal) {
-    Drupal.behaviors.customFormBehavior = {
-      attach: function (context, settings) {
-        $(document).ready(function () {
-          $('.address-checkbox', context).change(function() {
-            var isPermanentChecked = $('#edit-permanent-address', context).is(':checked');
-            var isTemporaryChecked = $('#edit-temporary-address', context).is(':checked');
+(function ($, Drupal, drupalSettings) {
 
-            if (isPermanentChecked) {
-              $('.form-item-temporary-address', context).hide();
-              $('.form-item-permanent-address', context).show();
-            }
+  $(document).ready(function() {
 
-            if (isTemporaryChecked) {
-              $('.form-item-permanent-address', context).hide();
-              $('.form-item-temporary-address', context).show();
-            }
-          });
-        });
+    var checkbox = $('#edit-check');
+    var temporaryAddressFields = $('.form-item-temporary');
+
+    checkbox.on('change', function() {
+          if ($(this).is(':checked')) {
+        temporaryAddressFields.hide();
+      } else {
+
+        temporaryAddressFields.show();
       }
-    };
-  })(jQuery, Drupal);
-
-  (function ($, Drupal) {
+    });
+  });
 
     $.fn.datacheck = function() {
-        alert(" form working");
-        $(".custom_form_user_details").submit();
-    };
+      alert("working");
+      $("#custom-user-details-form").submit();
+  };
 
-}(jQuery, Drupal));
+    Drupal.behaviors.MyModuleBehavior = {
+      attach: function(context, settings) {
+          // get color_body value with "drupalSettings.mymodule.color_body"
+          var color_body = drupalSettings.nishaj_exercise.color_body;
+          alert(color_body)
+          $('body').css('background', color_body);
+      }
+  };
 
-// (function($, Drupal, drupalSettings) {
-//   Drupal.behaviors.MyModuleBehavior = {
-//       attach: function(context, settings) {
-//           // get color_body value with "drupalSettings.mymodule.color_body"
-//           var color_body = drupalSettings.nishaj_exercise.color_body;
-//           alert(color_body)
-//           $('body').css('background', color_body);
-//       }
-//   };
-// })(jQuery, Drupal, drupalSettings);
-
-(function ($, Drupal, drupalSettings) {
   Drupal.behaviors.customModuleBehavior = {
     attach: function (context, settings) {
       var customVariable = drupalSettings.nishaj_exercise.customVariable;
@@ -49,4 +36,5 @@
       console.log(customVariable);
     }
   };
-})(jQuery, Drupal, drupalSettings);
+
+  })(jQuery, Drupal, drupalSettings);
